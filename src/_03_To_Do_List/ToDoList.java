@@ -1,7 +1,16 @@
 package _03_To_Do_List;
 
-public class ToDoList {
-	/*
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+public class ToDoList implements ActionListener {
+	 /*
 	 * Create a program with five buttons, add task, view tasks, remove task, save list, and load list. 
 	 *
 	 * When add task is clicked:
@@ -21,4 +30,73 @@ public class ToDoList {
 	 * 
 	 * When the program starts, it should automatically load the last saved file into the list. 
 	 */
+	JFrame frame;
+	JPanel panel;
+	JButton add;
+	JButton view;
+	JButton remove;
+	JButton save;
+	JButton load;
+	ArrayList <String> list = new ArrayList <String>();
+	public static void main(String[] args) {
+		ToDoList l = new ToDoList();
+		l.start();
+	}
+	void start() {
+		frame = new JFrame();
+		panel = new JPanel();
+		add = new JButton();
+		view = new JButton();
+		remove = new JButton();
+		save = new JButton();
+		load = new JButton();
+		add.addActionListener(this);
+		view.addActionListener(this);
+		remove.addActionListener(this);
+		save.addActionListener(this);
+		load.addActionListener(this);
+		add.setText("Add");
+		view.setText("View");
+		remove.setText("Remove");
+		save.setText("Save");
+		load.setText("Load");
+		panel.add(view);
+		panel.add(add);
+		panel.add(remove);
+		panel.add(save);
+		panel.add(load);
+		frame.add(panel);
+		frame.setVisible(true);
+		frame.pack();
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource().equals(add)) {
+			String input = JOptionPane.showInputDialog("What would you like to add to your to do list?");
+			list.add(input+"\n");
+		}
+		else if(e.getSource().equals(view)) {
+			//Work on this next
+		}
+		else if(e.getSource().equals(remove)) {
+			boolean found = false;
+			String input = JOptionPane.showInputDialog("What would you like to remove from exsistace?");
+			for(int i = 0; i<list.size();i++) {
+				if(list.get(i).equals(input+"\n")) {
+					list.remove(i);
+					found = true;
+					break;
+				}
+			}
+			if(found ==false) {
+				JOptionPane.showMessageDialog(null, "That couldn't be found");
+			}
+		}
+		else if(e.getSource().equals(save)) {
+	
+		}
+		else if(e.getSource().equals(load)) {
+	
+		}
+	}
 }
