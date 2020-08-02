@@ -1,11 +1,15 @@
 package _04_Directory_Iteration;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 
 public class DirectoryIterator {
 	public static void main(String[] args) {
+		ArrayList <String> s = new ArrayList <String>();
 		/* 
 		 * The following is an example of how to list all of the files in a directory.
 		 * Once the program is running, the directory is chosen using the JFileChooser.
@@ -18,7 +22,7 @@ public class DirectoryIterator {
 			File[] files = directory.listFiles();
 			if(files != null) {
 				for(File f : files) {
-				  System.out.println(f.getAbsolutePath());
+				  s.add(f.getAbsolutePath());
 				}
 			}
 		}
@@ -29,5 +33,24 @@ public class DirectoryIterator {
 		 * Be aware of possible directories inside of directories.
 		 * (e.g //Copyright © 2019 FirstName LastName)
 		 */
+		for(int i =0; i<s.size();i++) {
+			if(s.get(i).contains(".java")) {
+				try {
+					FileWriter fw = new FileWriter("src/_00_Intro_To_File_Input_and_Output/test2.txt", true);
+					
+					/*
+					NOTE: To append to a file that already exists, add true as a second parameter when calling the
+					      FileWriter constructor.
+					      (e.g. FileWriter fw = new FileWriter("src/_00_Intro_To_File_Input_and_Output/test2.txt", true);)
+					*/
+					
+					fw.write("//Copyright © 2020 Beckham Kunkler");
+						
+					fw.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }

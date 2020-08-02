@@ -83,11 +83,11 @@ public class ToDoList implements ActionListener {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("src/_03_To_Do_List/save.txt"));
 			String line = br.readLine();
-			while(line != null){
+			while (line != null) {
 				list.add(line);
 				line = br.readLine();
 			}
-			
+
 			br.close();
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
@@ -102,30 +102,71 @@ public class ToDoList implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(add)) {
 			String input = JOptionPane.showInputDialog("What would you like to add to your to do list?");
-			list.add("\n"+input);
+			try {
+				FileWriter fw = new FileWriter("src/_03_To_Do_List/save.txt", true);
+				fw.write(input + "\n");
+				fw.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		} else if (e.getSource().equals(view)) {
-			r = "";
-			for (int i = 0; i < list.size(); i++) {
-				r = r + list.get(i);
-			}
-			JOptionPane.showMessageDialog(null, r);
+			String end = getStringSave();
+			JOptionPane.showMessageDialog(null, end);
 		} else if (e.getSource().equals(remove)) {
-			boolean found = false;
-			String input = JOptionPane.showInputDialog("What would you like to remove from exsistace?");
-			for (int i = 0; i < list.size(); i++) {
-				if (list.get(i).contains("\n" + input)) {
-					list.remove(i);
-					found = true;
-					break;
+			try {
+				boolean found = false;
+				String input = JOptionPane.showInputDialog("What would you like to remove from exsistace?");
+				BufferedReader br = new BufferedReader(new FileReader("src/_03_To_Do_List/save.txt"));
+				String line = br.readLine();
+				while (line != null) {
+					if (line.equals(input)) {
+						list.remove(input);
+						String end = "";
+						try {
+							BufferedReader br2 = new BufferedReader(new FileReader("src/_03_To_Do_List/save.txt"));
+							String line2 = br.readLine();
+							while (line2 != null) {
+								if(!line.equals(input)) {
+								end = end + "\n" + line;
+								}
+								line2 = br2.readLine();
+							}
+
+							br2.close();
+						} catch (FileNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						try {
+							FileWriter fw = new FileWriter("src/_03_To_Do_List/save.txt", false);
+							fw.write(end);
+							fw.close();
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+						found = true;
+						break;
+					}
+					line = br.readLine();
 				}
-			}
-			if (found == false) {
-				JOptionPane.showMessageDialog(null, "That couldn't be found");
+				br.close();
+				if (found == false) {
+					JOptionPane.showMessageDialog(null, "That couldn't be found in your to do list");
+				}
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 		} else if (e.getSource().equals(save)) {
 			try {
 				fw = new FileWriter("src/_03_To_Do_List/save.txt");
-				fw.write(r);
+				fw.write(getStringSave());
 				fw.close();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -138,11 +179,11 @@ public class ToDoList implements ActionListener {
 			try {
 				BufferedReader br = new BufferedReader(new FileReader("src/_03_To_Do_List/save.txt"));
 				String line = br.readLine();
-				while(line != null){
+				while (line != null) {
 					list.add(line);
 					line = br.readLine();
 				}
-				
+
 				br.close();
 			} catch (FileNotFoundException e1) {
 				// TODO Auto-generated catch block
@@ -151,7 +192,28 @@ public class ToDoList implements ActionListener {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
-			
+
 		}
+	}
+
+	String getStringSave() {
+		String end = "";
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("src/_03_To_Do_List/save.txt"));
+			String line = br.readLine();
+			while (line != null) {
+				end = end + "\n" + line;
+				line = br.readLine();
+			}
+
+			br.close();
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return end;
 	}
 }
